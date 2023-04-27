@@ -1,8 +1,11 @@
 import React from "react";
+import {useState} from "react";
 import ReactMarkdown from "react-markdown";
 import rangeParser from "parse-numeric-range";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyToClipboard from 'react-copy-to-clipboard';
+import PopupComponent from "./CodeDownload";
+
 
 import { Button, ButtonToolbar, ButtonGroup, IconButton } from 'rsuite';
 import SaveIcon from '@rsuite/icons/legacy/Save';
@@ -17,6 +20,8 @@ import cpp from "react-syntax-highlighter/dist/cjs/languages/prism/cpp";
 import json from "react-syntax-highlighter/dist/cjs/languages/prism/json";
 import sql from "react-syntax-highlighter/dist/cjs/languages/prism/sql";
 import plsql from "react-syntax-highlighter/dist/esm/languages/prism/plsql";
+import javascript from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
+import jsx from "react-syntax-highlighter/dist/cjs/languages/prism/jsx";
 import MathJax from "react-mathjax";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -33,7 +38,11 @@ SyntaxHighlighter.registerLanguage("cpp", cpp);
 SyntaxHighlighter.registerLanguage("json", json);
 SyntaxHighlighter.registerLanguage("json", json);
 SyntaxHighlighter.registerLanguage("sql", sql);
-// SyntaxHighlighter.registerLanguage("plsql",plsql);
+SyntaxHighlighter.registerLanguage("sql", sql);
+SyntaxHighlighter.registerLanguage("SQL",sql);
+SyntaxHighlighter.registerLanguage("javascript",javascript);
+SyntaxHighlighter.registerLanguage("jsx",jsx);
+
 
 
 const syntaxTheme = oneDark;
@@ -44,6 +53,7 @@ type Props = {
 
 
 export default function AssistantMessageContent({ content, ...props }: Props) {
+  const [showPopup, setShowPopup] = useState(false);
   const MarkdownComponents: any = {
     // Work around for not rending <em> and <strong> tags
     em: ({ node, inline, className, children, ...props }: any) => {
@@ -95,14 +105,21 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
       };
       
       const downloadData = () =>{
-        const element = document.createElement("a");
-        const file = new Blob([props.children],
-          {type:"text/plain"});
-        element.href = URL.createObjectURL(file);
-        element.download = "sample.py";
-        document.body.appendChild(element);
-        element.click();
+        if (hasLang) {
+          const element = document.createElement("a");
+          const file = new Blob([props.children],
+            {type:"text/plain"});
+          element.href = URL.createObjectURL(file);
+          element.download = "sample." + hasLang[1];
+          document.body.appendChild(element);
+          element.click();
+          console.log(hasLang)
+        }
+       
       }
+
+
+
       
       // function exportUserInfo(props : Props) {
       //   const fileData = JSON.stringify();
@@ -116,10 +133,16 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
 
       return hasLang ? (
         <div>
-          {/* <CopyToClipboard text={props.children} onCopy={() => alert("Copied")}>
-          <button>Copy</button>
-        </CopyToClipboard> */}
-          <IconButton  icon={<SaveIcon />} onClick={downloadData}/>
+          
+          <div>
+            {/* <CopyToClipboard text={props.children} onCopy={() => alert("Copied")}>
+              <button>Copy</button>
+            </CopyToClipboard> */}
+            <button onClick={()=>setShowPopup(true)}>Download Code</button>
+            <IconButton  icon={<SaveIcon />} onClick={downloadData}/>
+          </div>
+         
+         
           
         {/* <button onClick={downloadData}>Test Download</button> */}
         <SyntaxHighlighter
@@ -128,7 +151,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
           PreTag="div"
           className="overflow-hidden rounded-md"
           showLineNumbers={true}
-          wrapLines={hasMeta}
+          wrapLines={hasMeta} 
           useInlineStyles={true}
           lineProps={applyHighlights}
         >
