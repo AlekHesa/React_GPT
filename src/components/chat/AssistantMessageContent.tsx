@@ -4,6 +4,8 @@ import rangeParser from "parse-numeric-range";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyToClipboard from 'react-copy-to-clipboard';
 
+import { Button, ButtonToolbar, ButtonGroup, IconButton } from 'rsuite';
+import SaveIcon from '@rsuite/icons/legacy/Save';
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import tsx from "react-syntax-highlighter/dist/cjs/languages/prism/tsx";
 import typescript from "react-syntax-highlighter/dist/cjs/languages/prism/typescript";
@@ -13,6 +15,8 @@ import markdown from "react-syntax-highlighter/dist/cjs/languages/prism/markdown
 import python from "react-syntax-highlighter/dist/cjs/languages/prism/python";
 import cpp from "react-syntax-highlighter/dist/cjs/languages/prism/cpp";
 import json from "react-syntax-highlighter/dist/cjs/languages/prism/json";
+import sql from "react-syntax-highlighter/dist/cjs/languages/prism/sql";
+import plsql from "react-syntax-highlighter/dist/esm/languages/prism/plsql";
 import MathJax from "react-mathjax";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -28,12 +32,16 @@ SyntaxHighlighter.registerLanguage("python", python);
 SyntaxHighlighter.registerLanguage("cpp", cpp);
 SyntaxHighlighter.registerLanguage("json", json);
 SyntaxHighlighter.registerLanguage("json", json);
+SyntaxHighlighter.registerLanguage("sql", sql);
+// SyntaxHighlighter.registerLanguage("plsql",plsql);
+
 
 const syntaxTheme = oneDark;
 
 type Props = {
   content: string;
 };
+
 
 export default function AssistantMessageContent({ content, ...props }: Props) {
   const MarkdownComponents: any = {
@@ -85,13 +93,35 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
           return {};
         }
       };
-
+      
+      const downloadData = () =>{
+        const element = document.createElement("a");
+        const file = new Blob([props.children],
+          {type:"text/plain"});
+        element.href = URL.createObjectURL(file);
+        element.download = "sample.py";
+        document.body.appendChild(element);
+        element.click();
+      }
+      
+      // function exportUserInfo(props : Props) {
+      //   const fileData = JSON.stringify();
+      //   const blob = new Blob([fileData], { type: "text/plain" });
+      //   const url = URL.createObjectURL(blob);
+      //   const link = document.createElement("a");
+      //   link.download = "user-info.json";
+      //   link.href = url;
+      //   link.click();
+      // }
 
       return hasLang ? (
         <div>
-          <CopyToClipboard text={props.children} onCopy={() => alert("Copied")}>
+          {/* <CopyToClipboard text={props.children} onCopy={() => alert("Copied")}>
           <button>Copy</button>
-        </CopyToClipboard>
+        </CopyToClipboard> */}
+          <IconButton  icon={<SaveIcon />} onClick={downloadData}/>
+          
+        {/* <button onClick={downloadData}>Test Download</button> */}
         <SyntaxHighlighter
           style={syntaxTheme}
           language={hasLang[1]}
@@ -112,6 +142,8 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
       
     },
   };
+
+    
 
   return (
     <ReactMarkdown
