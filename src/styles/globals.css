@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   :root {
     --text-primary: 41, 37, 36;
@@ -17,3 +18,6 @@
     --bg-tertiary: 55, 65, 81;
   }
 }
+
+
+

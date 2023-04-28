@@ -1,10 +1,10 @@
 import React from "react";
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import ReactMarkdown from "react-markdown";
 import rangeParser from "parse-numeric-range";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyToClipboard from 'react-copy-to-clipboard';
-import PopupComponent from "./CodeDownload";
+import Popup from "./CodeDownload";
 
 
 import { Button, ButtonToolbar, ButtonGroup, IconButton } from 'rsuite';
@@ -85,6 +85,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     code({ node, inline, className, ...props }: any) {
       const hasLang = /language-(\w+)/.exec(className || "");
       const hasMeta = node?.data?.meta;
+      const [code, setcode] = useState("");
 
       const applyHighlights: object = (applyHighlights: number) => {
         if (hasMeta) {
@@ -104,6 +105,10 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
         }
       };
       
+      useEffect(() => {
+        setcode(props.children?.toString() || "");
+      }, [props.children]);
+
       const downloadData = () =>{
         if (hasLang) {
           const element = document.createElement("a");
@@ -118,28 +123,16 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
        
       }
 
-
-
-      
-      // function exportUserInfo(props : Props) {
-      //   const fileData = JSON.stringify();
-      //   const blob = new Blob([fileData], { type: "text/plain" });
-      //   const url = URL.createObjectURL(blob);
-      //   const link = document.createElement("a");
-      //   link.download = "user-info.json";
-      //   link.href = url;
-      //   link.click();
-      // }
-
       return hasLang ? (
         <div>
           
           <div>
-            {/* <CopyToClipboard text={props.children} onCopy={() => alert("Copied")}>
-              <button>Copy</button>
-            </CopyToClipboard> */}
-            <button onClick={()=>setShowPopup(true)}>Download Code</button>
-            <IconButton  icon={<SaveIcon />} onClick={downloadData}/>
+            {/* <button onClick={()=>setShowPopup(true)}>Download Code</button> */}
+            <IconButton  icon={<SaveIcon />} onClick={() => setShowPopup(true)}/>
+             <Popup trigger={showPopup} setTrigger={setShowPopup} code={code}>
+                
+             </Popup>
+            
           </div>
          
          
