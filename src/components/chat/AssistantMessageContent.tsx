@@ -3,7 +3,7 @@ import {useState,useEffect} from "react";
 import ReactMarkdown from "react-markdown";
 import rangeParser from "parse-numeric-range";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import CopyToClipboard from 'react-copy-to-clipboard';
+
 import Popup from "./CodeDownload";
 
 
@@ -109,19 +109,12 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
         setcode(props.children?.toString() || "");
       }, [props.children]);
 
-      const downloadData = () =>{
-        if (hasLang) {
-          const element = document.createElement("a");
-          const file = new Blob([props.children],
-            {type:"text/plain"});
-          element.href = URL.createObjectURL(file);
-          element.download = "sample." + hasLang[1];
-          document.body.appendChild(element);
-          element.click();
-          console.log(hasLang)
-        }
-       
+
+      const test = () =>{
+        console.log(code)
       }
+
+      
 
       return hasLang ? (
         <div>
@@ -132,6 +125,8 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
              <Popup trigger={showPopup} setTrigger={setShowPopup} code={code}>
                 
              </Popup>
+
+             <button onClick={test}>test</button>
             
           </div>
          
