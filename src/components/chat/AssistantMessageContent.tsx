@@ -27,6 +27,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
 import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you
+import { test } from "node:test";
 
 SyntaxHighlighter.registerLanguage("tsx", tsx);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
@@ -54,6 +55,7 @@ type Props = {
 
 export default function AssistantMessageContent({ content, ...props }: Props) {
   const [showPopup, setShowPopup] = useState(false);
+  
   const MarkdownComponents: any = {
     // Work around for not rending <em> and <strong> tags
     em: ({ node, inline, className, children, ...props }: any) => {
@@ -118,7 +120,10 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
        
       }
 
-
+      const test = () => {
+        console.log(props.children);
+        console.log(content)
+      }
 
       
       // function exportUserInfo(props : Props) {
@@ -169,6 +174,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     
 
   return (
+    <>
     <ReactMarkdown
       remarkPlugins={[remarkMath]}
       rehypePlugins={[rehypeKatex]}
@@ -177,5 +183,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     >
       {content}
     </ReactMarkdown>
+    
+    </>
   );
 }
