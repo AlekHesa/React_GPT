@@ -3,12 +3,19 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-export default function Example(props: { trigger: any ,setTrigger : any, code: any}) {
+export default function Example(props: { trigger: any ,setTrigger : any, code: any,onClose: () => void}) {
   const [open, setOpen] = useState(true)
   const [fileName, setfileName] = useState("");
   const cancelButtonRef = useRef(null)
 
-
+  const delayedOnClose = () => {
+    console.log("Fading out...");
+    setOpen(false);
+    setTimeout(() => {
+      console.log("Closing now!");
+      props.onClose();
+    }, 500);
+  };
 
   const downloadData = () =>{
     const element = document.createElement("a");
@@ -24,7 +31,7 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
 
   return (props.trigger) ?(
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={delayedOnClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -58,6 +65,7 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-white">
                         Generate Code
                       </Dialog.Title>
+                      
                       <div className="mt-2">
                         <p className="text-sm text-gray-100">
                           Name your file

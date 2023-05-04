@@ -5,6 +5,7 @@ import rangeParser from "parse-numeric-range";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 import Popup from "./CodeDownload";
+import Modal from "./modal-download";
 
 
 import { Button, ButtonToolbar, ButtonGroup, IconButton } from 'rsuite';
@@ -25,8 +26,10 @@ import jsx from "react-syntax-highlighter/dist/cjs/languages/prism/jsx";
 import MathJax from "react-mathjax";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { UUID, randomUUID } from "crypto";
 
 import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you
+import { button } from "@material-tailwind/react";
 
 SyntaxHighlighter.registerLanguage("tsx", tsx);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
@@ -37,7 +40,6 @@ SyntaxHighlighter.registerLanguage("python", python);
 SyntaxHighlighter.registerLanguage("cpp", cpp);
 SyntaxHighlighter.registerLanguage("json", json);
 SyntaxHighlighter.registerLanguage("json", json);
-SyntaxHighlighter.registerLanguage("sql", sql);
 SyntaxHighlighter.registerLanguage("sql", sql);
 SyntaxHighlighter.registerLanguage("SQL",sql);
 SyntaxHighlighter.registerLanguage("javascript",javascript);
@@ -54,6 +56,8 @@ type Props = {
 
 export default function AssistantMessageContent({ content, ...props }: Props) {
   const [showPopup, setShowPopup] = useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+
   const MarkdownComponents: any = {
     // Work around for not rending <em> and <strong> tags
     em: ({ node, inline, className, children, ...props }: any) => {
@@ -86,6 +90,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
       const hasLang = /language-(\w+)/.exec(className || "");
       const hasMeta = node?.data?.meta;
       const [code, setcode] = useState("");
+      
 
       const applyHighlights: object = (applyHighlights: number) => {
         if (hasMeta) {
@@ -104,35 +109,59 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
           return {};
         }
       };
+
+      
       
       useEffect(() => {
         setcode(props.children?.toString() || "");
       }, [props.children]);
 
-
-      const test = () =>{
-        console.log(code)
+      
+      const test = () => {
+        console.log(hasLang)
+        console.log(props.children)
+      
       }
 
       
+      // console.log(props.children)
+      // console.log(content)
+ 
 
       return hasLang ? (
         <div>
-          
+
+        {/*Ini hanya untuk testing */}
+          {/* <div className="App">
+                <button
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  Open Modal
+                </button>
+
+                {showModal && (
+                  <Modal isOpen={true} onClose={() => setShowModal(false)}>
+                    
+                  </Modal>
+                )}
+              </div> */}
+        
           <div>
-            {/* <button onClick={()=>setShowPopup(true)}>Download Code</button> */}
+            
             <IconButton  icon={<SaveIcon />} onClick={() => setShowPopup(true)}/>
-             <Popup trigger={showPopup} setTrigger={setShowPopup} code={code}>
+             <Popup trigger={showPopup} setTrigger={setShowPopup} code={code} onClose={() =>setShowPopup(false)}>
                 
              </Popup>
 
-             <button onClick={test}>test</button>
+             
             
           </div>
          
          
           
-        {/* <button onClick={downloadData}>Test Download</button> */}
+          <button onClick={test}>Test Download</button>
         <SyntaxHighlighter
           style={syntaxTheme}
           language={hasLang[1]}
@@ -157,6 +186,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     
 
   return (
+    <>
     <ReactMarkdown
       remarkPlugins={[remarkMath]}
       rehypePlugins={[rehypeKatex]}
@@ -164,6 +194,8 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
       {...props}
     >
       {content}
+      
     </ReactMarkdown>
+    </>
   );
 }
