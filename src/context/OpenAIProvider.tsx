@@ -244,7 +244,17 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
 
       messages_ = messages_.length ? messages_ : messages;
 
+      const CODE_BLOCK_MAP = {
+        SQL: "sql",
+        Python: "python",
+        JavaScript: "javascript",
+        // add more words and syntaxes here as needed
+      };
+      
+      
+
       try {
+        
         const decoder = new TextDecoder();
         const { body, ok } = await fetch("/api/completion", {
           method: "POST",
@@ -255,10 +265,14 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
           body: JSON.stringify({
             ...config,
             messages: [systemMessage, ...messages_].map(
-              ({ role, content }) => ({
-                role,
-                content,
-              })
+              ({ role, content }) => {
+                const codeBlockSyntax = Object.entries(CODE_BLOCK_MAP)
+                  .find(([word]) => content.includes(word))?.[1];
+                return {
+                  role,
+                  content: codeBlockSyntax ? "```" + codeBlockSyntax + "\n" + content + "\n```" : content,
+                };
+              }
             ),
           }),
         });
@@ -310,6 +324,7 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
             },
           ];
         });
+      
       }
 
       setLoading(false);
