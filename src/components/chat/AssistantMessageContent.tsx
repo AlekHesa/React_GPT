@@ -92,7 +92,7 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
       const [code, setcode] = useState("");
       
 
-      const applyHighlights: object = (applyHighlights: number) => {
+      const applyHighlights = (lineNumber: number) => {
         if (hasMeta) {
           const RE = /{([\d,-]+)}/;
           const metadata = node.data.meta?.replace(/\s/g, "");
@@ -101,9 +101,11 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
             : "0";
           const highlightLines = rangeParser(strlineNumbers || "0");
           const highlight = highlightLines;
-          const data: string = highlight.includes(applyHighlights)
-            ? "highlight"
+          const id = randomUUID; // generate unique id
+          const data: string = highlight.includes(lineNumber)
+            ? `highlight ${id}` // add unique id to class name if line is highlighted
             : "";
+             
           return { data };
         } else {
           return {};
@@ -112,22 +114,26 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
 
       
       
-      useEffect(() => {
-        setcode(props.children?.toString() || "");
-      }, [props.children]);
+      
+
+      
+      const test = () => {
+        console.log(hasLang)
+        console.log(props.children)
+      
+      }
 
       
      
-
-      
-     
+      // console.log(content)
 
       return hasLang ? (
         <div>
           <div>
             <IconButton  icon={<SaveIcon />} onClick={() => setShowPopup(true)}/>
-             <Popup trigger={showPopup} setTrigger={setShowPopup} code={code} onClose={() =>setShowPopup(false)}/>
+             <Popup trigger={showPopup} setTrigger={setShowPopup} code={props.children} onClose={() =>setShowPopup(false)}/>
           </div>
+          <button onClick={test}>Test Download</button>
         <SyntaxHighlighter
           style={syntaxTheme}
           language={hasLang[1]}
@@ -165,3 +171,5 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     </>
   );
 }
+
+
