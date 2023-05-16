@@ -20,7 +20,6 @@ import python from "react-syntax-highlighter/dist/cjs/languages/prism/python";
 import cpp from "react-syntax-highlighter/dist/cjs/languages/prism/cpp";
 import json from "react-syntax-highlighter/dist/cjs/languages/prism/json";
 import sql from "react-syntax-highlighter/dist/cjs/languages/prism/sql";
-import plsql from "react-syntax-highlighter/dist/esm/languages/prism/plsql";
 import javascript from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
 import jsx from "react-syntax-highlighter/dist/cjs/languages/prism/jsx";
 import MathJax from "react-mathjax";
@@ -105,7 +104,6 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
           const data: string = highlight.includes(lineNumber)
             ? `highlight ${id}` // add unique id to class name if line is highlighted
             : "";
-             
           return { data };
         } else {
           return {};
@@ -114,14 +112,19 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
 
       
       
+      // useEffect(() => {
+      //   setcode(props.children?.toString() || "");
+      // }, [props.children]);
       
 
       
       const test = () => {
-        console.log(hasLang)
         console.log(props.children)
-      
-      }
+      //   console.log(content)
+      //   console.log(hasLang)
+       }
+
+       
 
       
      
@@ -171,5 +174,4 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     </>
   );
 }
-
 

@@ -50,30 +50,38 @@ export default function ChatInput({}: Props) {
 
   return (
     <div className="fixed bottom-0 flex h-40 w-full bg-gradient-to-t from-[rgb(var(--bg-secondary))] to-transparent md:w-[calc(100%-260px)]">
-      <form
-        className="mx-auto flex h-full w-full max-w-4xl items-end justify-center p-4 pb-10"
-        onSubmit={handleSubmit}
+  <form
+    className="mx-auto flex h-full w-full max-w-4xl items-end justify-center p-4 pb-10"
+    onSubmit={handleSubmit}
+  >
+    <div className="relative flex w-full flex-row rounded border border-stone-500/20 bg-tertiary shadow-xl">
+      {/* Dropdown List */}
+      {/* <select className="p-4 text-primary bg-tertiary outline-none">
+        <option value="option1">Ask Idea</option>
+        <option value="option2">Ask Code</option>
+        <option value="option3">Ask Z</option>
+      </select> */}
+      
+      <textarea
+        ref={textAreaRef}
+        className="max-h-[200px] w-full resize-none border-none bg-tertiary p-4 text-primary outline-none"
+        onChange={handleChange}
+        value={input}
+        rows={1}
+      />
+      <button
+        type="submit"
+        className="rounded p-4 text-primary hover:bg-primary/50"
       >
-        <div className="relative flex w-full flex-row rounded border border-stone-500/20 bg-tertiary shadow-xl">
-          <textarea
-            ref={textAreaRef}
-            className="max-h-[200px] w-full resize-none border-none bg-tertiary p-4 text-primary outline-none"
-            onChange={handleChange}
-            value={input}
-            rows={1}
-          />
-          <button
-            type="submit"
-            className="rounded p-4 text-primary hover:bg-primary/50"
-          >
-            {loading ? (
-              <div className="mx-auto h-5 w-5 animate-spin rounded-full border-b-2 border-white" />
-            ) : (
-              <MdSend />
-            )}
-          </button>
-        </div>
-      </form>
+        {loading ? (
+          <div className="mx-auto h-5 w-5 animate-spin rounded-full border-b-2 border-white" />
+        ) : (
+          <MdSend />
+        )}
+      </button>
     </div>
+  </form>
+</div>
+
   );
 }

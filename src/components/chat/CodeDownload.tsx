@@ -25,7 +25,7 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    props.setTrigger(false);
+    // props.setTrigger(false);
 
   } 
 
@@ -86,7 +86,8 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
                     <button
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-neutral-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-600 sm:ml-3 sm:w-auto"
-                        onClick={() => props.setTrigger(false)}>
+                        // onClick={() => props.setTrigger(false)}
+                        >
                         Copy to clipboard
                       </button>
                      </CopyToClipboard>

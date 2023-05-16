@@ -14,7 +14,7 @@ import {
   OpenAISystemMessage,
   OpenAIChatModels
 } from "@/utils/OpenAI";
-import React, { PropsWithChildren, useCallback, useEffect } from "react";
+import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -23,7 +23,9 @@ const CHAT_ROUTE = "/";
 const defaultContext = {
   systemMessage: {
     role: "system",
-    content: "You are an AI named AG-BOT that can help user to solve problems and also user can ask you a question about a certain words to know its meaning and description. The problem that they can ask is related to technologies needs such as digital printing, information technology, and any technology related topic. if user ask anything that is not related to the topic mentioned before, do not answer the question and say please do not ask anything other than the topic i mention",
+    content: "You are an AI named AG-BOT that can help user to solve problems and also user can ask you a question about a certain words to know its meaning and description.\
+     The problem that they can ask is related to technologies needs such as digital printing, information technology, and any technology related topic.\
+      if user ask anything that is not related to the topic mentioned before, do not answer the question and say 'Not Related to Topic",
   } as OpenAISystemMessage,
   messages: [] as OpenAIChatMessage[],
   config: defaultConfig as OpenAIConfig,
@@ -44,6 +46,7 @@ const defaultContext = {
   submit: () => {},
   loading: true,
   error: "",
+  code_block : true,
 };
 
 const OpenAIContext = React.createContext<{
@@ -71,6 +74,7 @@ const OpenAIContext = React.createContext<{
   submit: () => void;
   loading: boolean;
   error: string;
+  code_block : boolean;
 }>(defaultContext);
 
 export default function OpenAIProvider({ children }: PropsWithChildren) {
@@ -78,6 +82,8 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [code_block, setcode_block] = useState(false);
+  
 
   // Conversation state
   const [conversations, setConversations] = React.useState<History>(
@@ -239,9 +245,11 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
     async (messages_: OpenAIChatMessage[] = []) => {
       if (loading) return;
       setLoading(true);
-
+      
       messages_ = messages_.length ? messages_ : messages;
-
+      
+      
+      
       try {
         const decoder = new TextDecoder();
         const { body, ok } = await fetch("/api/completion", {
@@ -255,7 +263,18 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
             messages: [systemMessage, ...messages_].map(
               ({ role, content }) => ({
                 role,
-                content,
+                
+                content:content+ '\if its asking for a code or giving an example of a code,\
+                answer the code within this\
+                \
+                ```language\
+                \
+                ```\
+                \
+                fill in the language with language that is asked for\
+                if its not asking for a code, just answer it regularly\
+                if its not asking for technology related stuff or any code, dont generate any answer\
+                ',
               })
             ),
           }),
@@ -359,6 +378,7 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
       updateConfig,
       submit,
       error,
+      code_block,
     }),
     [
       systemMessage,
@@ -371,6 +391,7 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
       conversations,
       clearConversations,
       error,
+      code_block
     ]
   );
 

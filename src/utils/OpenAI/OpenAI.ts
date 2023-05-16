@@ -9,11 +9,12 @@ import {
 
 export const defaultConfig = {
   model: "gpt-3.5-turbo",
-  temperature: 0.5,
+  temperature: 0.1,
   max_tokens: 2048,
   top_p: 1,
   frequency_penalty: 0,
   presence_penalty: 0.6,
+  stop: "//STOP//"
 };
 
 export type OpenAIRequest = {
