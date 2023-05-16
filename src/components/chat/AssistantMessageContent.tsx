@@ -2,7 +2,7 @@ import React from "react";
 import {useState,useEffect} from "react";
 import ReactMarkdown from "react-markdown";
 import rangeParser from "parse-numeric-range";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { coldarkDark, materialDark, nightOwl, oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 import Popup from "./CodeDownload";
 import Modal from "./modal-download";
@@ -28,7 +28,9 @@ import rehypeKatex from "rehype-katex";
 import { UUID, randomUUID } from "crypto";
 
 import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you
-import { button } from "@material-tailwind/react";
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+
 
 SyntaxHighlighter.registerLanguage("tsx", tsx);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
@@ -46,7 +48,7 @@ SyntaxHighlighter.registerLanguage("jsx",jsx);
 
 
 
-const syntaxTheme = oneDark;
+const syntaxTheme = coldarkDark;
 
 type Props = {
   content: string;
@@ -110,11 +112,9 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
         }
       };
 
-      
-      
-      // useEffect(() => {
-      //   setcode(props.children?.toString() || "");
-      // }, [props.children]);
+      useEffect(() => {
+        setcode(props.children?.toString() || "");
+      }, [props.children]);
       
 
       
@@ -132,11 +132,33 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
 
       return hasLang ? (
         <div>
-          <div>
+          {/* <div>
             <IconButton  icon={<SaveIcon />} onClick={() => setShowPopup(true)}/>
              <Popup trigger={showPopup} setTrigger={setShowPopup} code={props.children} onClose={() =>setShowPopup(false)}/>
-          </div>
-          <button onClick={test}>Test Download</button>
+          </div> */}
+         <div className="flex mb-2">
+              <button
+                type="button"
+                className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 sm:ml-2 sm:w-auto"
+                onClick={() => setShowPopup(true)}
+              >
+                <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                <span>Download</span>
+              </button>
+              <Popup trigger={showPopup} setTrigger={setShowPopup} code={code} onClose={() =>setShowPopup(false)}/>
+
+              <CopyToClipboard text={props.children} onCopy={() => alert("Copied to clipboard")}>
+                <button
+                  type="button"
+                  className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 sm:ml-2 sm:w-auto"
+                  // onClick={() => props.setTrigger(false)}
+                >
+                  
+                  Copy to clipboard
+                </button>
+              </CopyToClipboard>
+         </div>
+          
         <SyntaxHighlighter
           style={syntaxTheme}
           language={hasLang[1]}

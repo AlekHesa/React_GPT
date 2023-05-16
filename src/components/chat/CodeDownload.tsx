@@ -1,7 +1,6 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import CopyToClipboard from 'react-copy-to-clipboard';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export default function Example(props: { trigger: any ,setTrigger : any, code: any,onClose: () => void}) {
   const [open, setOpen] = useState(true)
@@ -25,9 +24,13 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    // props.setTrigger(false);
+    // props.setTrigger(false)
+
 
   } 
+  const test = () => {
+    console.log(props.code)
+  }
 
   return (props.trigger) ?(
     <Transition.Root show={open} as={Fragment}>
@@ -82,19 +85,18 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <CopyToClipboard text={props.code} onCopy={() => alert("Copied to clipboard")}>
-                    <button
-                        type="button"
-                        className="inline-flex w-full justify-center rounded-md bg-neutral-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-600 sm:ml-3 sm:w-auto"
-                        // onClick={() => props.setTrigger(false)}
-                        >
-                        Copy to clipboard
-                      </button>
-                     </CopyToClipboard>
+                <button
+                    type="button"
+                    className="inline-flex w-full justify-center rounded-md bg-neutral-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-netural-600 sm:ml-3 sm:w-auto"
+                    onClick={test}
+                    ref={cancelButtonRef}
+                  >
+                    Test
+                  </button>
                   
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-yellow-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-600 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-md bg-neutral-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-netural-600 sm:ml-3 sm:w-auto"
                     onClick={downloadData}
                     ref={cancelButtonRef}
                   >
