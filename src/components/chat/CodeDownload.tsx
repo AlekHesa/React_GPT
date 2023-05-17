@@ -2,7 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-export default function Example(props: { trigger: any ,setTrigger : any, code: any,onClose: () => void}) {
+export default function Example(props: { trigger: any ,setTrigger : any, code: any ,onClose: () => void}) {
   const [open, setOpen] = useState(true)
   const [fileName, setfileName] = useState("");
   const cancelButtonRef = useRef(null)
@@ -18,13 +18,12 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
 
   const downloadData = () =>{
     const element = document.createElement("a");
-    const file = new Blob([props.code],
-      {type:"text/plain"});
+    const file = new Blob([props.code], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    // props.setTrigger(false)
+    
 
 
   } 
@@ -33,6 +32,7 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
   }
 
   return (props.trigger) ?(
+    <>
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={delayedOnClose}>
         <Transition.Child
@@ -85,14 +85,6 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-neutral-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-netural-600 sm:ml-3 sm:w-auto"
-                    onClick={test}
-                    ref={cancelButtonRef}
-                  >
-                    Test
-                  </button>
                   
                   <button
                     type="button"
@@ -109,5 +101,6 @@ export default function Example(props: { trigger: any ,setTrigger : any, code: a
         </div>
       </Dialog>
     </Transition.Root>
+    </>
   ) : null;
 }

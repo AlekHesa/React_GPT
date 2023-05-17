@@ -46,7 +46,7 @@ const defaultContext = {
   submit: () => {},
   loading: true,
   error: "",
-  code_block : true,
+  
 };
 
 const OpenAIContext = React.createContext<{
@@ -74,7 +74,7 @@ const OpenAIContext = React.createContext<{
   submit: () => void;
   loading: boolean;
   error: string;
-  code_block : boolean;
+  
 }>(defaultContext);
 
 export default function OpenAIProvider({ children }: PropsWithChildren) {
@@ -96,6 +96,7 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
   );
   const [config, setConfig] = React.useState<OpenAIConfig>(defaultConfig);
   const [messages, setMessages] = React.useState<OpenAIChatMessage[]>([]);
+  const [code,setCode] = useState("");
 
   // Load conversation from local storage
   useEffect(() => {
@@ -356,6 +357,8 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
     [submit]
   );
 
+  
+
   const value = React.useMemo(
     () => ({
       systemMessage,
@@ -379,6 +382,7 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
       submit,
       error,
       code_block,
+     
     }),
     [
       systemMessage,
@@ -391,7 +395,8 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
       conversations,
       clearConversations,
       error,
-      code_block
+      code_block,
+     
     ]
   );
 
