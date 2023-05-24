@@ -281,6 +281,9 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
           }),
         });
 
+        const newestContent = messages_[messages_.length - 1].content;
+        console.log(newestContent);
+
         if (!body) return;
         const reader = body.getReader();
 
@@ -316,6 +319,7 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
           message.content += chunkValue;
 
           updateMessageContent(message.id as number, message.content);
+          
         }
       } catch (error: any) {
         setMessages((prev) => {

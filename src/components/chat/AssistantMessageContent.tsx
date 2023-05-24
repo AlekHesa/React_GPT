@@ -94,6 +94,8 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
     code({ node, inline, className, ...props }: any) {
       const hasLang = /language-(\w+)/.exec(className || "");
       const hasMeta = node?.data?.meta;
+      const [buttonText, setButtonText] = useState('Copy to Clipboard');
+      const [isCopied, setIsCopied] = useState(false);
       
       const applyHighlights = (lineNumber: number) => {
         if (hasMeta) {
@@ -117,8 +119,20 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
       const parse_data = () => {
       setCode(props.children?.toString() || "");
       setShowPopup(true)
+      console.log(content)
       };
 
+      const handleCopyClick = () => {
+        
+        
+        setIsCopied(true);
+        setButtonText('Copied!');
+    
+        setTimeout(() => {
+          setIsCopied(false);
+          setButtonText('Copy to Clipboard');
+        }, 3000);
+      };
       return hasLang ? (
         <div>
          
@@ -134,12 +148,12 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
               <Popup trigger={showPopup} setTrigger={setShowPopup} code={code} onClose={() => setShowPopup(false)} />
 
 
-              <CopyToClipboard text={props.children} onCopy={() => alert("Copied to clipboard")}>
+              <CopyToClipboard text={props.children} onCopy={handleCopyClick}>
                 <button
                   type="button"
                   className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 sm:ml-2 sm:w-auto"                 
                 >
-                  Copy to Clipboard
+                   {isCopied ? 'Copied' : buttonText}
                 </button>
               </CopyToClipboard>
 
