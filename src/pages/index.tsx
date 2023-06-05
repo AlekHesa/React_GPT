@@ -14,6 +14,7 @@ export default function Chat() {
 
   return (
     <React.Fragment>
+      
       <Head>
         <title>OpenAI</title>
         <meta name="description" content="A clone of OpenAI playground." />
@@ -25,6 +26,7 @@ export default function Chat() {
         <ChatMessages />
         <ChatSidebar />
       </div>
+      
     </React.Fragment>
   );
 }

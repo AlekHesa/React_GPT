@@ -25,7 +25,9 @@ const defaultContext = {
     role: "system",
     content: "You are an AI named AG-BOT that can help user to solve problems and also user can ask you a question about a certain words to know its meaning and description.\
      The problem that they can ask is related to technologies needs such as digital printing, information technology, and any technology related topic.\
-      if user ask anything that is not related to the topic mentioned before, do not answer the question and say 'Not Related to Topic",
+      if user ask anything that is not related to the topic mentioned before, do not answer the question and say 'Not Related to Topic\
+      {\
+      }",
   } as OpenAISystemMessage,
   messages: [] as OpenAIChatMessage[],
   config: defaultConfig as OpenAIConfig,
@@ -252,6 +254,8 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
       
       
       try {
+        let isFirstUser = true;
+
         const decoder = new TextDecoder();
         const { body, ok } = await fetch("/api/completion", {
           method: "POST",
@@ -262,21 +266,29 @@ export default function OpenAIProvider({ children }: PropsWithChildren) {
           body: JSON.stringify({
             ...config,
             messages: [systemMessage, ...messages_].map(
-              ({ role, content }) => ({
-                role,
-                
-                content:content+ '\if its asking for a code or giving an example of a code,\
-                answer the code within this\
-                \
-                ```language\
-                \
-                ```\
-                \
-                fill in the language with language that is asked for\
-                if its not asking for a code, just answer it regularly\
-                if its not asking for technology related stuff or any code, dont generate any answer\
-                ',
-              })
+              ({ role, content }) => {
+                if (role === "user") {
+                  // Update the content only for the first "user" role
+                  if (isFirstUser) {
+                    content = content + ' \'if its asking for a code or giving an example of a code,\\n' +
+                      'answer the code within this\\n' +
+                      '\\n' +
+                      '```language\\n' +
+                      '\\n' +
+                      '```\\n' +
+                      '\\n' +
+                      'fill in the language with the language that is asked for\\n' +
+                      'if it\'s not asking for a code, just answer it regularly\\n' +
+                      'if it\'s not asking for technology-related stuff or any code, don\'t generate any answer\\n' +
+                      '\'';
+                      
+                    isFirstUser = false;
+                  }
+                } return{
+                  role,
+                  content,
+                }
+              }
             ),
           }),
         });

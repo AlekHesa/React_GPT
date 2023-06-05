@@ -26,3 +26,10 @@ export interface OpenAIModel {
   name: string;
   maxLimit: number;
 }
+
+
+// [
+//   {role:"system",content:"mdalsdlad"}
+//   {role:"user",content:"bagaiamna"}
+// ]
+

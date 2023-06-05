@@ -133,6 +133,8 @@ export default function AssistantMessageContent({ content, ...props }: Props) {
           setButtonText('Copy to Clipboard');
         }, 3000);
       };
+
+      console.log(content)
       return hasLang ? (
         <div>
          

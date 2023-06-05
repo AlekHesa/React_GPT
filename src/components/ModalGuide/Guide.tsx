@@ -1,75 +1,237 @@
-import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { Fragment, useState } from 'react'
+import ReactMarkdown from "react-markdown";
+import rangeParser from "parse-numeric-range";
+import { coldarkDark, materialDark, nightOwl, oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { textCode } from './Text_code';
 
-export default function Guide(props: { trigger: any ,setTrigger : any,onClose: () => void}) {
-  const [open, setOpen] = useState(true)
-  const [fileName, setfileName] = useState("");
-  const cancelButtonRef = useRef(null)
 
-  const delayedOnClose = () => {
-    console.log("Fading out...");
-    setOpen(false);
-    setTimeout(() => {
-      console.log("Closing now!");
-      props.onClose();
-    }, 500);
-  };
 
-  
-  
 
-  return (props.trigger) ?(
+import { Button, ButtonToolbar, ButtonGroup, IconButton } from 'rsuite';
+import SaveIcon from '@rsuite/icons/legacy/Save';
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import tsx from "react-syntax-highlighter/dist/cjs/languages/prism/tsx";
+import typescript from "react-syntax-highlighter/dist/cjs/languages/prism/typescript";
+import scss from "react-syntax-highlighter/dist/cjs/languages/prism/scss";
+import bash from "react-syntax-highlighter/dist/cjs/languages/prism/bash";
+import markdown from "react-syntax-highlighter/dist/cjs/languages/prism/markdown";
+import python from "react-syntax-highlighter/dist/cjs/languages/prism/python";
+import cpp from "react-syntax-highlighter/dist/cjs/languages/prism/cpp";
+import json from "react-syntax-highlighter/dist/cjs/languages/prism/json";
+import sql from "react-syntax-highlighter/dist/cjs/languages/prism/sql";
+import javascript from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
+import jsx from "react-syntax-highlighter/dist/cjs/languages/prism/jsx";
+import MathJax from "react-mathjax";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import { UUID, randomUUID } from "crypto";
+
+import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+
+
+
+SyntaxHighlighter.registerLanguage("tsx", tsx);
+SyntaxHighlighter.registerLanguage("typescript", typescript);
+SyntaxHighlighter.registerLanguage("scss", scss);
+SyntaxHighlighter.registerLanguage("bash", bash);
+SyntaxHighlighter.registerLanguage("markdown", markdown);
+SyntaxHighlighter.registerLanguage("python", python);
+SyntaxHighlighter.registerLanguage("cpp", cpp);
+SyntaxHighlighter.registerLanguage("json", json);
+SyntaxHighlighter.registerLanguage("json", json);
+SyntaxHighlighter.registerLanguage("sql", sql);
+SyntaxHighlighter.registerLanguage("SQL",sql);
+SyntaxHighlighter.registerLanguage("javascript",javascript);
+SyntaxHighlighter.registerLanguage("jsx",jsx);
+
+
+
+const syntaxTheme = coldarkDark;
+
+
+export default function MyModal() {
+  let [isOpen, setIsOpen] = useState(false)
+  let [isOpenCode, setIsOpenCode] = useState(false)
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  function openModalCode() {
+    setIsOpenCode(true)
+    
+  }
+
+  function closeModalCode() {
+    setIsOpenCode(false)
+  }
+
+
+
+ 
+
+
+
+
+  return (
     <>
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={delayedOnClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+      <div  className="inline-flex w-full justify-center rounded-md px-3 py-2 sm:ml-2 sm:w-auto">
+        <button
+          type="button"
+          onClick={openModal}
+          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </Transition.Child>
+          Guidelines
+        </button>
+      </div>
+      <div  className="inline-flex w-full justify-center rounded-md px-3 py-2 sm:ml-2 sm:w-auto">
+        <button
+          type="button"
+          onClick={openModalCode}
+          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        >
+          Prompt Example
+        </button>
+      </div>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
-                    </div>
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-white">
-                        Generate Code
-                      </Dialog.Title>
+
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Welcome to AG-BOT
+                  </Dialog.Title>
+                  <div className="mt-2">
+                      <p className="text-sm text-black-500 mb-5 leading-loose">
+                        When interacting with this AI, it's essential to focus on questions related to Information Technology, such as coding, programming languages, software development, hardware, networking, cybersecurity, and other IT-related topics.
+                      </p>
+                      <p className="text-sm text-gray-500 leading-loose">
+                        It's important to note that this AI has been set to accept Information Technology related topics, and other questions outside the topic will not be answered.
+                      </p>
                       
-                   
-                    </div>
                   </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
+
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={closeModal}
+                    >
+                      Got it, thanks!
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
           </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+        </Dialog>
+      </Transition>
+
+      <Transition appear show={isOpenCode} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModalCode}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Prompt Example For Code
+                  </Dialog.Title>
+                  <div className="mt-2">
+                    <textarea
+                      className="max-h-[200px] w-full resize-none border-none bg-tertiary p-4 mb-3 text-primary outline-none"
+                      rows={1}
+                      value={"Make a simple Calculator in python"}
+                    />
+
+                    <SyntaxHighlighter
+                    style={syntaxTheme}
+                    language="python"
+                    PreTag="div"
+                    className="overflow-hidden rounded-md"
+                    showLineNumbers={true}
+                    
+                    useInlineStyles={true}
+                    
+                  >
+                 {textCode}
+                  </SyntaxHighlighter>
+                  </div>
+
+
+
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={closeModalCode}
+                    >
+                      test
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </>
-  ) : null;
+  )
 }

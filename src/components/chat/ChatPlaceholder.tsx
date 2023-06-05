@@ -11,6 +11,15 @@ type Props = {};
 export default function ChatPlaceholder({}: Props) {
   const [showPopup, setShowPopup] = useState(false);
 
+  let [isOpen, setIsOpen] = useState(true)
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
 
 
   return (
@@ -29,10 +38,10 @@ export default function ChatPlaceholder({}: Props) {
           A GPT AI that can help you write codes, gave idea, and many more
         </p>
         <div className="m-6 flex items-center justify-center">
-        <button
+        {/* <button
                 type="button"
                 className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 sm:ml-2 sm:w-auto"
-                onClick={() => setShowPopup(true)}
+                onClick={() => setShowPopup((prevShowPopup) => !prevShowPopup)}
               >
                
                 <span>Guidelines</span>  
@@ -48,12 +57,12 @@ export default function ChatPlaceholder({}: Props) {
               >
                
                 <span>Code Generator Guide</span>  
-              </button>
+              </button> */}
               
        
         </div>    
         {/* <Guide trigger={showPopup} setTrigger={setShowPopup} onClose={() => setShowPopup(false)} /> */}
-        <Example trigger={showPopup} setTrigger={setShowPopup} onClose={() => setShowPopup(false)} code={undefined} />
+        <Guide/>
       </div>
     </div>
   );
