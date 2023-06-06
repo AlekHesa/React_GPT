@@ -26,44 +26,24 @@ export default function ChatPlaceholder({}: Props) {
     <div className="flex h-full w-full items-center justify-center">
       <div className="max-w-3xl p-4 text-center text-primary">
         <h1 className="text-4xl font-medium">AG-BOT</h1>
-       
-       
-       
-
         <div className="p-4 mb-8">
           {/* <GithubStar /> */}
           Your Problem Solver and Idea Generator
-        </div>
+       
           <p className="mt-4 mx-6 text-lg">
           A GPT AI that can help you write codes, gave idea, and many more
         </p>
         <div className="m-6 flex items-center justify-center">
-        {/* <button
-                type="button"
-                className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 sm:ml-2 sm:w-auto"
-                onClick={() => setShowPopup((prevShowPopup) => !prevShowPopup)}
-              >
-               
-                <span>Guidelines</span>  
-              </button>
+        
+              
+        <Guide/>
+        
+        </div>   
+       
         </div>
         
-      
-        <div className="m-4 flex items-center justify-center">
-        <button
-                type="button"
-                className="inline-flex w-full justify-center rounded-md bg-neutral-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-500 sm:ml-2 sm:w-auto"
-                onClick={() => setShowPopup(true)}
-              >
-               
-                <span>Code Generator Guide</span>  
-              </button> */}
-              
-       
-        </div>    
-        {/* <Guide trigger={showPopup} setTrigger={setShowPopup} onClose={() => setShowPopup(false)} /> */}
-        <Guide/>
       </div>
+     
     </div>
   );
 }

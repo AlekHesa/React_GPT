@@ -27,9 +27,9 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { UUID, randomUUID } from "crypto";
 
+
 import "katex/dist/katex.min.css"; // `rehype-katex` does not import the CSS for you
 import CopyToClipboard from 'react-copy-to-clipboard';
-
 
 
 
@@ -73,6 +73,7 @@ export default function MyModal() {
     setIsOpenCode(false)
   }
 
+  
 
 
  
@@ -135,10 +136,10 @@ export default function MyModal() {
                     Welcome to AG-BOT
                   </Dialog.Title>
                   <div className="mt-2">
-                      <p className="text-sm text-black-500 mb-5 leading-loose">
+                      <p className="text-sm text-gray-700 mb-5 leading-loose">
                         When interacting with this AI, it's essential to focus on questions related to Information Technology, such as coding, programming languages, software development, hardware, networking, cybersecurity, and other IT-related topics.
                       </p>
-                      <p className="text-sm text-gray-500 leading-loose">
+                      <p className="text-sm text-gray-700 leading-loose">
                         It's important to note that this AI has been set to accept Information Technology related topics, and other questions outside the topic will not be answered.
                       </p>
                       
@@ -200,22 +201,19 @@ export default function MyModal() {
                       value={"Make a simple Calculator in python"}
                     />
 
-                    <SyntaxHighlighter
-                    style={syntaxTheme}
-                    language="python"
-                    PreTag="div"
-                    className="overflow-hidden rounded-md"
-                    showLineNumbers={true}
-                    
-                    useInlineStyles={true}
-                    
-                  >
-                 {textCode}
-                  </SyntaxHighlighter>
+                    <div className="max-h-[400px] overflow-y-auto">
+                      <SyntaxHighlighter
+                        style={syntaxTheme}
+                        language="python"
+                        PreTag="div"
+                        className="overflow-hidden rounded-md break-words"
+                        showLineNumbers={true}
+                        useInlineStyles={true}
+                      >
+                        {textCode}
+                      </SyntaxHighlighter>
+                    </div>
                   </div>
-
-
-
 
                   <div className="mt-4">
                     <button
@@ -230,6 +228,8 @@ export default function MyModal() {
               </Transition.Child>
             </div>
           </div>
+
+
         </Dialog>
       </Transition>
     </>

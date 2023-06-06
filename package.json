@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.18",
+    "@reactour/tour": "^3.4.0",
     "@rsuite/icons": "^1.0.2",
     "@types/node": "18.15.10",
     "@types/react": "18.0.30",

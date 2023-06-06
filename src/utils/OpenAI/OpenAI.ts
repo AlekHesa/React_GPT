@@ -9,7 +9,7 @@ import {
 
 export const defaultConfig = {
   model: "gpt-3.5-turbo",
-  temperature: 0.2,
+  temperature: 0.35,
   max_tokens: 2048,
   top_p: 0.1,
   frequency_penalty: 0,

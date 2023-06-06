@@ -8,6 +8,7 @@ import ButtonContainer from "./buttons/ButtonContainer";
 import Conversations from "./conversation/Conversations";
 import ApiKey from "./buttons/ApiKey";
 import CurrentModel from './buttons/CurrentModel';
+import Guide from "./buttons/Guide";
 
 type Props = {};
 
@@ -45,12 +46,10 @@ export default function ChatSidebar({}: Props) {
           </ButtonContainer>
 
           <ThemeButton />
+          {/* <Guide/> */}
         </div>
 
-        {/* <Github />
-        <span className="text-center text-primary/80">
-          Made with ❤️ by Nashex
-        </span> */}
+       
       </div>
     </div>
   );

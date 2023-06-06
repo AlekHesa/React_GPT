@@ -6,6 +6,8 @@ import React from "react";
 import { getConversation } from "./../../utils/History";
 import { useOpenAI } from "@/context/OpenAIProvider";
 import ChatHeader from "./../../components/chat/ChatHeader";
+import { Tour,TourProvider } from '@reactour/tour';
+
 
 export default function Chat() {
   const { loadConversation, conversationId } = useOpenAI();
@@ -35,6 +37,7 @@ export default function Chat() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
       <div className="max-w-screen relative h-screen max-h-screen w-screen overflow-hidden">
         <ChatHeader />
         <ChatMessages />
